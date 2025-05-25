@@ -41,7 +41,7 @@ const Profile = () => {
     e.preventDefault();
 
     try{
-           const res = await axios.post(`${import.meta.env.VITE_API_URL}/posts`,formData,{
+           const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/posts`,formData,{
         headers:{
           "Content-Type":"multipart/form-data"
         },

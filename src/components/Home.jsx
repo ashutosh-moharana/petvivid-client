@@ -107,7 +107,7 @@ export default function Home() {
                   {/* Pet Image */}
                   {post.picture ? (
                     <img 
-                      src={`${import.meta.env.VITE_API_URL+post.picture}`}
+                      src={post.picture}
                       alt={post.petName}
                       className="w-full h-48 object-cover"
                       onError={(e) => {

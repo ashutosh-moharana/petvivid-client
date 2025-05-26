@@ -35,7 +35,7 @@ const Profile = () => {
       } catch (err) {}
     };
     fetchPosts();
-  }, [posts]);
+  }, []);
 
   const handleSubmitPost = async (e) => {
     e.preventDefault();

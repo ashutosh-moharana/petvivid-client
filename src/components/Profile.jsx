@@ -290,9 +290,9 @@ const Profile = () => {
                     value={editPost? editPost.type:formData.type}
                     onChange={(e) =>{
                       if(editPost) {
-                        setEditPost({ ...editPost, petType: e.target.value });
+                        setEditPost({ ...editPost, type: e.target.value });
                       }else{
-                        setFormData({ ...formData, petType: e.target.value })
+                        setFormData({ ...formData, type: e.target.value })
                       }
                     }
                     }

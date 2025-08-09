@@ -1,25 +1,23 @@
-import React from "react";
+import axios from 'axios';
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from 'react-router-dom';
 
-import { useEffect } from "react";
-import axios from "axios";
-
-const LogOut = () => {
-  useEffect(() => {
-    const logout = async () => {
-      try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/auth/logout`, {
-          withCredentials: "true",
+const Logout = () => {
+    const {setUser , setIsLoggedIn} = useAuth();
+    const navigate = useNavigate();
+    const handleLogout = async () =>{
+     await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {
+          withCredentials: true,
         });
-        // alert(res.data.message);
-       
-      } catch (error) {
-        console.error("Error logging out:", error);
-      }
-    };
-    logout();
-  }, []);
-
- 
+    setUser({}); 
+    setIsLoggedIn(false);
+    navigate("/");
+    }
+  return (
+    <button className="btn btn-primary" onClick={handleLogout}>
+      Logout
+    </button>
+  );
 };
 
-export default LogOut;
+export default Logout;

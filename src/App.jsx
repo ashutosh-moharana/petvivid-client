@@ -1,10 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./components/Home";
-import Login from "./components/Login";
-import SignUp from "./components/SignUp";
-import Profile from "./components/Profile";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+import YourPosts from "./pages/YourPosts";
 
 import { AuthProvider } from "./context/AuthContext";
+import Contact from "./pages/Contact";
+import About from "./pages/About";
 
 
 
@@ -14,11 +16,13 @@ export default function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home/>} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/profile" element={<Profile />} />
-         
+          
+          <Route path="/your-posts" element={<YourPosts />} />
+          <Route path="/contact" element={<Contact/>}/>
+          <Route path="/about" element={<About/>}/>
         </Routes>
       </Router>
     </AuthProvider>

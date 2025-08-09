@@ -31,7 +31,7 @@ const Card = ({
       </div>
       <figure className="relative flex-1 min-h-[200px]">
         {isAdmin && (
-          <div className="absolute top-2 right-2 flex gap-2 z-10">
+          <div className="absolute top-2 right-2 flex gap-2 ">
             <button
               className="btn btn-square btn-sm bg-base-100 hover:bg-base-200 border-none"
               onClick={() => {

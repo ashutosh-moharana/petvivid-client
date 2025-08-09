@@ -71,18 +71,18 @@ const Feed = ({ posts, isAdmin, handleDeletePost, handleEditPost, fetchPosts }) 
         );
       })}
 
-      <div className="bg-black rounded-full  fixed bottom-4 right-4 p-2 border-2 border-red-500">
+      <div className="bg-black rounded-full  fixed bottom-4 right-4 p-2 border-2 border-red-600">
         <button
-          className="btn btn-square btn-sm bg-base-100 hover:bg-base-200 border-none"
+          className="btn btn-square btn-sm bg-base-100 hover:bg-base-200 border-none "
           onClick={() => {
             createRef.current.showModal();
           }}
         >
-          <MdCreate size={"2rem"}   />
+          <MdCreate size={"1.5rem"}   />
         </button>
         <dialog id="edit_modal" ref={createRef} className="modal">
           <div className="modal-box">
-            <h3 className="font-bold text-lg mb-4">Edit Post</h3>
+            <h3 className="font-bold text-lg mb-4">Create Post</h3>
             <form
               className="flex flex-col gap-3"
               encType="multipart/form-data"

@@ -48,7 +48,7 @@ const Hero = () => {
         </div>
         <div className="flex-1 w-full md:w-1/2">
           <img
-            src="./hero_image.png"
+            src="./hero_image.webp"
             className="w-full h-auto max-h-[300px] md:max-h-[400px] object-contain object-center"
             alt="Hero illustration of pets"
           />

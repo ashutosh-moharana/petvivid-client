@@ -32,7 +32,8 @@ const Feed = ({ posts, isAdmin, handleDeletePost, handleEditPost, fetchPosts }) 
     }
 
     setLoading(true);
-    const createdPost = await axios.post(
+   try {
+     const createdPost = await axios.post(
       `${import.meta.env.VITE_API_URL}/api/posts`,
       formData,
       {
@@ -52,10 +53,14 @@ const Feed = ({ posts, isAdmin, handleDeletePost, handleEditPost, fetchPosts }) 
       petType: "",
       type: "",
       description: "",
-      picture: "",
+      picture: "" ,
     });
     setLoading(false);
     fetchPosts();
+   } catch (error) {
+        console.log(error);
+        
+   }
   };
 
   return (
@@ -127,6 +132,7 @@ const Feed = ({ posts, isAdmin, handleDeletePost, handleEditPost, fetchPosts }) 
                 onChange={(e) => setData({ ...data, type: e.target.value })}
                 required
               >
+                <option value="">-- Select Type --</option> 
                 <option value="lost">Lost</option>
                 <option value="found">Found</option>
               </select>
@@ -146,6 +152,7 @@ const Feed = ({ posts, isAdmin, handleDeletePost, handleEditPost, fetchPosts }) 
                 onChange={(e) =>
                   setData({ ...data, picture: e.target.files[0] })
                 }
+                required
               />
               <div className="modal-action flex justify-end gap-2">
                 <button

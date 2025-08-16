@@ -2,6 +2,7 @@ import { MdCreate } from "react-icons/md";
 import Card from "./Card";
 import { useState, useRef } from "react";
 import axios from "axios";
+import { BeatLoader } from "react-spinners";
 
 const Feed = ({ posts, isAdmin, handleDeletePost, handleEditPost, fetchPosts }) => {
   const [data, setData] = useState({
@@ -13,7 +14,10 @@ const Feed = ({ posts, isAdmin, handleDeletePost, handleEditPost, fetchPosts }) 
     picture: "",
   });
 
+  const [loading,setLoading] = useState(false);
   const createRef = useRef();
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Post creation started ");
@@ -26,6 +30,8 @@ const Feed = ({ posts, isAdmin, handleDeletePost, handleEditPost, fetchPosts }) 
     if (data.picture) {
       formData.append("picture", data.picture);
     }
+
+    setLoading(true);
     const createdPost = await axios.post(
       `${import.meta.env.VITE_API_URL}/api/posts`,
       formData,
@@ -48,6 +54,7 @@ const Feed = ({ posts, isAdmin, handleDeletePost, handleEditPost, fetchPosts }) 
       description: "",
       picture: "",
     });
+    setLoading(false);
     fetchPosts();
   };
 
@@ -149,7 +156,7 @@ const Feed = ({ posts, isAdmin, handleDeletePost, handleEditPost, fetchPosts }) 
                   Cancel
                 </button>
                 <button type="submit" className="btn btn-primary">
-                  Create
+                  {loading ? <BeatLoader size={10} color={"white"}/> : "Create"}
                 </button>
               </div>
             </form>

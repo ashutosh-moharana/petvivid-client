@@ -1,7 +1,7 @@
 import { MdDeleteForever } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
-import { useRef } from "react";
-import {useState} from 'react';
+import { useRef,useState } from "react";
+import { BeatLoader } from "react-spinners";
 const Card = ({
   postId,
   title,
@@ -16,6 +16,7 @@ const Card = ({
 }) => {
   const deleteRef = useRef();
   const editRef = useRef();
+  const [loading, setLoading] = useState(false);
   const [editData, setEditData] = useState({
     title,
     petName,
@@ -48,6 +49,7 @@ const Card = ({
                   encType="multipart/form-data"
                   onSubmit={async (e) => {
                     e.preventDefault();
+                    setLoading(true);
                     const formData = new FormData();
                     formData.append("title", editData.title);
                     formData.append("petName", editData.petName);
@@ -58,7 +60,9 @@ const Card = ({
                       formData.append("picture", editData.picture);
                     }
                     await handleEditPost(postId, formData);
+
                     editRef.current.close();
+                    setLoading(false)
                   }}
                 >
                   <input
@@ -112,7 +116,7 @@ const Card = ({
                       Cancel
                     </button>
                     <button type="submit" className="btn btn-primary">
-                      Save
+                       {loading ? <BeatLoader size={10} color={"white"}/> : "Save"}
                     </button>
                   </div>
                 </form>
@@ -137,11 +141,13 @@ const Card = ({
                   </button>
                   <button
                     className="btn btn-error absolute bottom-2 right-2"
-                    onClick={() => {
-                      handleDeletePost(postId);
+                    onClick={async () => {
+                      setLoading(true);
+                      await handleDeletePost(postId);
+                      setLoading(false);
                     }}
                   >
-                    Delete
+                     {loading ? <BeatLoader size={10} color={"white"}/> : "Delete"}
                   </button>
                 </form>
               </div>
@@ -149,7 +155,7 @@ const Card = ({
           </div>
         )}
 
-        <img src={imgUrl} alt="Pet" className="w-full h-full object-cover" />
+        <img src={imgUrl} alt="Pet" className="w-full h-full object-cover" loading="lazy" />
       </figure>
       <div className="card-body flex-none">
         <div className="flex items-center justify-between">

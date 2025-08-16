@@ -62,8 +62,8 @@ const Navbar = () => {
       </div>
       {isLoggedIn ? (
         <div className="navbar-end items-center gap-2 sm:gap-4">
-          <p className="font-bold text-base sm:text-lg md:text-xl truncate max-w-[100px] sm:max-w-none">
-            {user.name.split(" ")[0]}
+          <p className=" size-8 md:size-10 flex justify-center items-center font-bold text-base sm:text-lg md:text-xl truncate max-w-[100px] sm:max-w-none rounded-full ring-1 ring-red-500">
+            {user.name.split("")[0]}
           </p>
           <div className="hidden lg:block">
             

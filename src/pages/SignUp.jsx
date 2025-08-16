@@ -1,8 +1,9 @@
-
-import { useState} from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { BeatLoader } from "react-spinners";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import BackButton from "../components/BackButton";
 export default function Signup() {
   const [formData, setFormData] = useState({
     name: "",
@@ -10,11 +11,13 @@ export default function Signup() {
     password: "",
   });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { setIsLoggedIn, setUser } = useAuth();
 
   const handleSignUp = async (e) => {
     try {
+       setLoading(true);
       const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/auth/register`,
         formData,
@@ -22,14 +25,17 @@ export default function Signup() {
       );
       setUser(res.data.user);
       setIsLoggedIn(res.data.success);
+      setLoading(false);
       navigate("/");
     } catch (err) {
-      setError(err);
+      setError(err.response.data.message);
+      setLoading(false)
     }
   };
 
   return (
     <div className="min-h-screen flex justify-center items-center p-6">
+      <BackButton/>
       <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-md border p-4 ">
         <legend className="fieldset-legend text-2xl">SignUp</legend>
 
@@ -70,7 +76,7 @@ export default function Signup() {
         />
 
         <button className="btn btn-neutral mt-4" onClick={handleSignUp}>
-          Sign Up
+          {loading ? <BeatLoader size={10} color={"white"} /> : "SignUp"}
         </button>
 
         {error && <p className="text-error">{error}</p>}

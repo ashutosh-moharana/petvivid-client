@@ -18,6 +18,25 @@ export default function SignUp() {
   const [loading, setLoading] = useState(false);
 
   const handleSignUp = async (e) => {
+    e.preventDefault(); // Prevent default form submission if wrapped in form
+    setError(""); // Clear previous errors
+
+    if (!name || !email || !password) {
+      setError("Please fill in all fields");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return;
+    }
+
     try {
       setLoading(true);
       const res = await axios.post(
@@ -32,7 +51,7 @@ export default function SignUp() {
       setLoading(false);
       navigate("/");
     } catch (err) {
-      setError("Signup failed. Please try again.");
+      setError(err.response?.data?.message || "Signup failed. Please try again.");
       setLoading(false);
     }
   };

@@ -18,6 +18,14 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
+    e.preventDefault(); // Prevent default form submission if wrapped in form
+    setError(""); // Clear previous errors
+
+    if (!email || !password) {
+      setError("Please fill in all fields");
+      return;
+    }
+
     try {
       setLoading(true);
       const res = await axios.post(
@@ -35,7 +43,7 @@ export default function Login() {
       setLoading(false);
       navigate("/");
     } catch (err) {
-      setError("Invalid credentials");
+      setError(err.response?.data?.message || "Invalid credentials");
       setLoading(false);
     }
   };

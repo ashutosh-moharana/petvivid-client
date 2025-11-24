@@ -5,11 +5,13 @@ import { BeatLoader } from 'react-spinners';
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { GoogleLogin } from '@react-oauth/google';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const { setUser, setIsLoggedIn } = useAuth();
   const navigate = useNavigate();
@@ -57,7 +59,7 @@ export default function SignUp() {
             <label className="text-sm font-medium text-text-muted ml-1">Full Name</label>
             <input
               type="text"
-              placeholder="John Doe"
+              placeholder="Enter your full name"
               className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors placeholder:text-white/20"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -68,7 +70,7 @@ export default function SignUp() {
             <label className="text-sm font-medium text-text-muted ml-1">Email</label>
             <input
               type="email"
-              placeholder="email@example.com"
+              placeholder="Enter your email address"
               className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors placeholder:text-white/20"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -77,13 +79,22 @@ export default function SignUp() {
 
           <div className="space-y-2">
             <label className="text-sm font-medium text-text-muted ml-1">Password</label>
-            <input
-              type="password"
-              placeholder="Create a password"
-              className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors placeholder:text-white/20"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Create a password"
+                className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors placeholder:text-white/20 pr-10"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-white transition-colors cursor-pointer"
+              >
+                {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+              </button>
+            </div>
             {error && <p className="text-red-500 text-sm mt-2 ml-1">{error}</p>}
           </div>
 

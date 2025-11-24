@@ -1,15 +1,18 @@
 import { useNavigate } from "react-router-dom";
-import { IoMdArrowRoundBack } from "react-icons/io";
+import { MdArrowBack } from "react-icons/md";
 
-
-const BackButton = () => {
-    const navigate = useNavigate();
+const BackButton = ({ className = "" }) => {
+  const navigate = useNavigate();
 
   return (
-    <button onClick={()=>{
-        navigate(-1);
-    }} className=' absolute top-4 left-4 btn btn-primary md:text-2xl'> <IoMdArrowRoundBack/> </button>
-  )
-}
+    <button
+      onClick={() => navigate(-1)}
+      className={`flex items-center justify-center w-10 h-10 rounded-full bg-background border border-border text-text-muted hover:text-white hover:border-primary transition-all duration-200 ${className}`}
+      aria-label="Go back"
+    >
+      <MdArrowBack size={20} />
+    </button>
+  );
+};
 
 export default BackButton;

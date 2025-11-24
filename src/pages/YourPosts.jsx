@@ -2,7 +2,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import Feed from "../components/Feed";
-import Navbar from "../components/Navbar";
 
 const YourPosts = () => {
   const { user } = useAuth();
@@ -37,31 +36,38 @@ const YourPosts = () => {
       console.log("Error encountered:", err);
     }
   };
+
   const fetchPosts = async () => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/posts`);
-
-      const data = res.data.filter((post) => post.userId == user._id);
+      const data = res.data.filter((post) => post.userId && post.userId._id === user._id);
       setPosts(data);
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     if (user?._id) {
       fetchPosts();
     }
   }, [user]);
+
   return (
-    <div className=" min-h-screen relative flex flex-col items-center">
-      <Navbar />
-      <Feed
-        posts={posts}
-        isAdmin={true}
-        handleDeletePost={handleDeletePost}
-        handleEditPost={handleEditPost}
-        fetchPosts={fetchPosts}
-      />
+    <div className="min-h-screen pt-20 px-4">
+      <div className="max-w-lg mx-auto">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">Your Posts</h1>
+          <p className="text-text-muted">Manage all your posted pets here</p>
+        </div>
+        <Feed
+          posts={posts}
+          isAdmin={false}
+          handleDeletePost={handleDeletePost}
+          handleEditPost={handleEditPost}
+          fetchPosts={fetchPosts}
+        />
+      </div>
     </div>
   );
 };

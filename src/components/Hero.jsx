@@ -1,57 +1,40 @@
-import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
-    const {isLoggedIn} = useAuth();
-    const navigate = useNavigate();
-    const [email, setEmail] = useState("");
-
-    const handlePostPet = () => {
-      if (email) {
-        navigate("/login", { state: { email } });
-      }
-    };
-
   return (
-    <div className="hero flex-1 h-full px-4 sm:px-6 md:px-8">
-      <div className="hero-content flex flex-col-reverse md:flex-row h-full py-6 md:py-12 gap-8 md:gap-12">
-        <div className="h-full md:w-1/2 flex flex-col justify-center space-y-4 md:space-y-6">
-          <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold tracking-wide leading-tight md:leading-14">
-            Helping Reunite Lost Pets With Their Families...
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+      {/* Background Effects */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[128px] pointer-events-none"></div>
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[128px] pointer-events-none"></div>
+
+      <div className="container mx-auto px-4 z-10 text-center">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white leading-tight">
+            Reuniting Pets with <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-500">
+              Loving Families
+            </span>
           </h1>
-          <p className="text-sm sm:text-base text-gray-600 tracking-tight leading-relaxed">
-            PetVivid Is the web platform that connects people to help reunite
-            lost and found pets. Users can post details of missing or found
-            animals , browse posts in their area and contact pet owners or
-            finders. It is a simple way to spread awareness and bring kids back
-            home faster.
+
+          <p className="text-xl md:text-2xl text-text-muted max-w-2xl mx-auto font-light leading-relaxed">
+            A community-driven platform to help lost pets find their way home.
+            Share alerts, connect with neighbors, and bring them back safely.
           </p>
 
-          {!isLoggedIn && (
-            <div className="w-full flex flex-col sm:flex-row gap-4 sm:gap-2 mt-2 sm:mt-4">
-              <input
-                type="email"
-                className="input input-bordered w-full text-base"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <button 
-                className="btn btn-primary w-full sm:w-auto text-base px-6"
-                onClick={handlePostPet}
-              >
-                Post a Pet
-              </button>
-            </div>
-          )}
-        </div>
-        <div className="flex-1 w-full md:w-1/2">
-          <img
-            src="./hero_image.webp"
-            className="w-full h-auto max-h-[300px] md:max-h-[400px] object-contain object-center"
-            alt="Hero illustration of pets"
-          />
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
+            <Link
+              to="/signup"
+              className="px-8 py-4 bg-primary hover:bg-primary-hover text-white rounded-full font-bold text-lg transition-all shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_40px_rgba(220,38,38,0.5)] w-full sm:w-auto"
+            >
+              Get Started
+            </Link>
+            <Link
+              to="/about"
+              className="px-8 py-4 bg-surface hover:bg-surface-hover border border-border text-white rounded-full font-bold text-lg transition-all w-full sm:w-auto"
+            >
+              Learn More
+            </Link>
+          </div>
         </div>
       </div>
     </div>

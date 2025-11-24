@@ -29,11 +29,15 @@ const YourPosts = () => {
 
       if (res.data && res.data.post) {
         setPosts((prevPosts) =>
-          prevPosts.map((post) => (post._id === postId ? res.data.post : post))
+          prevPosts.map((post) => (
+            post._id === postId 
+              ? { ...res.data.post, userId: res.data.post.userId || post.userId }
+              : post
+          ))
         );
       }
     } catch (err) {
-      console.log("Error encountered:", err);
+      console.error("Error updating post:", err);
     }
   };
 

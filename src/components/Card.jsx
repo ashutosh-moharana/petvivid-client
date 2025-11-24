@@ -1,20 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MdDelete, MdEdit, MdMoreVert, MdFavorite, MdShare, MdLocationOn } from "react-icons/md";
 import { BeatLoader } from "react-spinners";
 import { useAuth } from "../context/AuthContext";
 
 const Card = ({ post, isAdmin, handleDeletePost, handleEditPost }) => {
   const { user } = useAuth();
+  
+  // Safety check for post object
+  if (!post || !post._id) {
+    return null;
+  }
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [showActions, setShowActions] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    name: post.name,
-    type: post.type,
-    description: post.description,
-    image: null,
+    title: post.title || "",
+    petName: post.petName || post.name || "",
+    petType: post.petType || "",
+    description: post.description || "",
+    type: post.type || "Lost",
+    picture: null,
   });
+
+  // Update formData when post prop changes (only if modal is closed)
+  useEffect(() => {
+    if (!isEditModalOpen) {
+      setFormData({
+        title: post.title || "",
+        petName: post.petName || post.name || "",
+        petType: post.petType || "",
+        description: post.description || "",
+        type: post.type || "Lost",
+        picture: null,
+      });
+    }
+  }, [post._id, isEditModalOpen]);
 
   const isOwner = user && post.userId && user._id === post.userId._id;
   const canEdit = isAdmin || isOwner;
@@ -25,23 +47,30 @@ const Card = ({ post, isAdmin, handleDeletePost, handleEditPost }) => {
   };
 
   const handleFileChange = (e) => {
-    setFormData({ ...formData, image: e.target.files[0] });
+    setFormData({ ...formData, picture: e.target.files[0] });
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
     const data = new FormData();
-    data.append("name", formData.name);
-    data.append("type", formData.type);
+    data.append("title", formData.title);
+    data.append("petName", formData.petName);
+    data.append("petType", formData.petType);
     data.append("description", formData.description);
-    if (formData.image) {
-      data.append("image", formData.image);
+    data.append("type", formData.type);
+    if (formData.picture) {
+      data.append("picture", formData.picture);
     }
 
     setLoading(true);
-    await handleEditPost(post._id, data);
-    setLoading(false);
-    setIsEditModalOpen(false);
+    try {
+      await handleEditPost(post._id, data);
+      setLoading(false);
+      setIsEditModalOpen(false);
+    } catch (error) {
+      console.error("Error updating post:", error);
+      setLoading(false);
+    }
   };
 
   const timeAgo = (dateString) => {
@@ -138,7 +167,7 @@ const Card = ({ post, isAdmin, handleDeletePost, handleEditPost }) => {
 
           {/* Pet Info */}
           <div className="space-y-2">
-            <h2 className="text-xl font-bold text-white">{post.name}</h2>
+            <h2 className="text-xl font-bold text-white">{post.petName || post.name}</h2>
             <p className="text-sm text-text-muted leading-relaxed line-clamp-2">
               {post.description}
             </p>
@@ -169,7 +198,7 @@ const Card = ({ post, isAdmin, handleDeletePost, handleEditPost }) => {
       {/* Edit Modal */}
       {isEditModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-surface border border-white/10 rounded-2xl w-full max-w-lg shadow-2xl">
+          <div className="bg-surface border border-white/10 rounded-2xl w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh]">
             <div className="flex items-center justify-between p-6 border-b border-white/10">
               <h3 className="text-xl font-bold text-white">Edit Post</h3>
               <button
@@ -179,20 +208,40 @@ const Card = ({ post, isAdmin, handleDeletePost, handleEditPost }) => {
                 ✕
               </button>
             </div>
-
-            <form onSubmit={handleUpdate} className="p-6 space-y-5">
+            <form id="edit-post-form" onSubmit={handleUpdate} className="flex-1 overflow-y-auto p-6 space-y-5">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-text-muted">Pet Name</label>
+                <label className="text-sm font-medium text-text-muted">Title</label>
                 <input
                   type="text"
-                  name="name"
-                  value={formData.name}
+                  name="title"
+                  value={formData.title}
                   onChange={handleInputChange}
                   className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors"
                   required
                 />
               </div>
-
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-text-muted">Pet Name</label>
+                <input
+                  type="text"
+                  name="petName"
+                  value={formData.petName}
+                  onChange={handleInputChange}
+                  className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-text-muted">Pet Type</label>
+                <input
+                  type="text"
+                  name="petType"
+                  value={formData.petType}
+                  onChange={handleInputChange}
+                  className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors"
+                  required
+                />
+              </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-text-muted">Status</label>
                 <select
@@ -205,7 +254,6 @@ const Card = ({ post, isAdmin, handleDeletePost, handleEditPost }) => {
                   <option value="Found">Found</option>
                 </select>
               </div>
-
               <div className="space-y-2">
                 <label className="text-sm font-medium text-text-muted">Description</label>
                 <textarea
@@ -217,7 +265,6 @@ const Card = ({ post, isAdmin, handleDeletePost, handleEditPost }) => {
                   required
                 />
               </div>
-
               <div className="space-y-2">
                 <label className="text-sm font-medium text-text-muted">Update Image (Optional)</label>
                 <input
@@ -227,24 +274,24 @@ const Card = ({ post, isAdmin, handleDeletePost, handleEditPost }) => {
                   className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-primary file:text-white file:cursor-pointer hover:file:bg-primary-hover"
                 />
               </div>
-
-              <div className="flex gap-3 pt-4">
-                <button
-                  type="button"
-                  onClick={() => setIsEditModalOpen(false)}
-                  className="flex-1 px-6 py-3 bg-background border border-white/10 text-white rounded-xl hover:bg-white/5 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="flex-1 px-6 py-3 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold transition-all shadow-lg disabled:opacity-50"
-                >
-                  {loading ? <BeatLoader size={8} color="white" /> : "Update"}
-                </button>
-              </div>
             </form>
+            <div className="flex gap-3 p-6 border-t border-white/10 bg-background sticky bottom-0">
+              <button
+                type="button"
+                onClick={() => setIsEditModalOpen(false)}
+                className="flex-1 px-6 py-3 bg-background border border-white/10 text-white rounded-xl hover:bg-white/5 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                form="edit-post-form"
+                disabled={loading}
+                className="flex-1 px-6 py-3 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold transition-all shadow-lg disabled:opacity-50"
+              >
+                {loading ? <BeatLoader size={8} color="white" /> : "Update"}
+              </button>
+            </div>
           </div>
         </div>
       )}

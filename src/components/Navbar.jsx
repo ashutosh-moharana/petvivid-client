@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { MdMenu, MdClose, MdLogout, MdLogin, MdPersonAdd } from "react-icons/md";
+import { MdMenu, MdClose } from "react-icons/md";
 import Logout from "./Logout";
 
 const Navbar = () => {
@@ -119,14 +119,14 @@ const Navbar = () => {
                   onClick={toggleMenu}
                   className="flex items-center justify-center gap-2 w-full py-3 border border-border rounded-xl text-sm font-medium text-white hover:bg-surface transition-colors"
                 >
-                  <MdLogin /> Login
+                  Login
                 </Link>
                 <Link
                   to="/signup"
                   onClick={toggleMenu}
                   className="flex items-center justify-center gap-2 w-full py-3 bg-primary text-white rounded-xl text-sm font-medium hover:bg-primary-hover transition-colors shadow-lg shadow-red-900/20"
                 >
-                  <MdPersonAdd /> Sign Up
+                  Sign Up
                 </Link>
               </div>
             )}

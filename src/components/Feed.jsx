@@ -8,10 +8,12 @@ const Feed = ({ posts, isAdmin, handleDeletePost, handleEditPost, fetchPosts }) 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    type: "Lost",
+    title: "",
+    petName: "",
+    petType: "",
     description: "",
-    image: null,
+    type: "Lost",
+    picture: null,
   });
 
   const handleInputChange = (e) => {
@@ -20,27 +22,28 @@ const Feed = ({ posts, isAdmin, handleDeletePost, handleEditPost, fetchPosts }) 
   };
 
   const handleFileChange = (e) => {
-    setFormData({ ...formData, image: e.target.files[0] });
+    setFormData({ ...formData, picture: e.target.files[0] });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
-    data.append("name", formData.name);
-    data.append("type", formData.type);
+    data.append("title", formData.title);
+    data.append("petName", formData.petName);
+    data.append("petType", formData.petType);
     data.append("description", formData.description);
-    data.append("image", formData.image);
-    data.append("createdAt", new Date().toISOString());
+    data.append("type", formData.type);
+    data.append("picture", formData.picture);
 
     try {
       setLoading(true);
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/posts/create`, data, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/posts`, data, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
       setLoading(false);
       setIsModalOpen(false);
-      setFormData({ name: "", type: "Lost", description: "", image: null });
+      setFormData({ title: "", petName: "", petType: "", description: "", type: "Lost", picture: null });
       fetchPosts();
     } catch (error) {
       console.error("Error creating post:", error);
@@ -84,7 +87,7 @@ const Feed = ({ posts, isAdmin, handleDeletePost, handleEditPost, fetchPosts }) 
       {/* Create Post Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-surface border border-white/10 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+          <div className="bg-surface border border-white/10 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200 flex flex-col max-h-[90vh]">
             <div className="flex items-center justify-between p-6 border-b border-white/10">
               <h3 className="text-xl font-bold text-white">Create New Post</h3>
               <button
@@ -94,21 +97,43 @@ const Feed = ({ posts, isAdmin, handleDeletePost, handleEditPost, fetchPosts }) 
                 <MdClose size={24} />
               </button>
             </div>
-
-            <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            <form id="create-post-form" onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-6">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-text-muted ml-1">Pet Name</label>
+                <label className="text-sm font-medium text-text-muted ml-1">Title</label>
                 <input
                   type="text"
-                  name="name"
-                  placeholder="e.g. Fluffy"
+                  name="title"
+                  placeholder="e.g. Lost Dog"
                   className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors"
-                  value={formData.name}
+                  value={formData.title}
                   onChange={handleInputChange}
                   required
                 />
               </div>
-
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-text-muted ml-1">Pet Name</label>
+                <input
+                  type="text"
+                  name="petName"
+                  placeholder="e.g. Fluffy"
+                  className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors"
+                  value={formData.petName}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-text-muted ml-1">Pet Type</label>
+                <input
+                  type="text"
+                  name="petType"
+                  placeholder="e.g. Dog, Cat"
+                  className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors"
+                  value={formData.petType}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-text-muted ml-1">Status</label>
                 <div className="grid grid-cols-2 gap-4">
@@ -134,7 +159,6 @@ const Feed = ({ posts, isAdmin, handleDeletePost, handleEditPost, fetchPosts }) 
                   </button>
                 </div>
               </div>
-
               <div className="space-y-2">
                 <label className="text-sm font-medium text-text-muted ml-1">Description</label>
                 <textarea
@@ -146,7 +170,6 @@ const Feed = ({ posts, isAdmin, handleDeletePost, handleEditPost, fetchPosts }) 
                   required
                 ></textarea>
               </div>
-
               <div className="space-y-2">
                 <label className="text-sm font-medium text-text-muted ml-1">Photo</label>
                 <div className="relative">
@@ -162,8 +185,8 @@ const Feed = ({ posts, isAdmin, handleDeletePost, handleEditPost, fetchPosts }) 
                     htmlFor="file-upload"
                     className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-white/10 rounded-xl cursor-pointer hover:border-primary hover:bg-white/5 transition-colors"
                   >
-                    {formData.image ? (
-                      <span className="text-primary font-medium">{formData.image.name}</span>
+                    {formData.picture ? (
+                      <span className="text-primary font-medium">{formData.picture.name}</span>
                     ) : (
                       <>
                         <MdImage size={32} className="text-text-muted mb-2" />
@@ -173,17 +196,24 @@ const Feed = ({ posts, isAdmin, handleDeletePost, handleEditPost, fetchPosts }) 
                   </label>
                 </div>
               </div>
-
-              <div className="pt-2">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full py-4 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold text-lg shadow-lg shadow-red-900/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {loading ? <BeatLoader size={10} color="white" /> : "Post Alert"}
-                </button>
-              </div>
             </form>
+            <div className="flex gap-3 p-6 border-t border-white/10 bg-background sticky bottom-0">
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(false)}
+                className="flex-1 px-6 py-3 bg-background border border-white/10 text-white rounded-xl hover:bg-white/5 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                form="create-post-form"
+                disabled={loading}
+                className="flex-1 px-6 py-3 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold text-lg shadow-lg shadow-red-900/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? <BeatLoader size={10} color="white" /> : "Post Alert"}
+              </button>
+            </div>
           </div>
         </div>
       )}

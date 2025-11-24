@@ -46,20 +46,17 @@ export default function Home() {
       );
 
       if (res.data && res.data.post) {
-        // The updated post from server might not have populated user, 
-        // but we can merge it with existing post user data or re-fetch.
-        // For simplicity, let's re-fetch to ensure data consistency, 
-        // or manually preserve the user object if the backend doesn't return it populated.
-        // If we just replace, we might lose the populated user object if the backend returns unpopulated.
-        // Let's check if res.data.post has user populated. Usually update returns the document as is in DB (unpopulated unless specified).
-        // So safe bet is to re-fetch or manually patch.
-        // Let's try re-fetching for now to be safe, or just update fields and keep user.
-
-        // Optimistic update preserving user:
         setPosts((prevPosts) =>
-          prevPosts.map((post) =>
-            post._id === postId ? { ...res.data.post, userId: post.userId } : post
-          )
+          prevPosts.map((post) => {
+            if (post._id === postId) {
+              // If userId is missing in response, preserve old userId
+              return {
+                ...res.data.post,
+                userId: res.data.post.userId || post.userId
+              };
+            }
+            return post;
+          })
         );
       }
     } catch (err) {

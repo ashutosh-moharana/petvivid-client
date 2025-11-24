@@ -21,7 +21,7 @@ export default function Logout({ onLogout }) {
       setUser(null);
       setLoading(false);
       if (onLogout) onLogout();
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       console.error("Logout failed", error);
       setLoading(false);

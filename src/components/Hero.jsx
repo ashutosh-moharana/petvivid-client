@@ -8,19 +8,19 @@ const Hero = () => {
       <div className="absolute top-0 left-1/4 w-48 h-48 sm:w-96 sm:h-96 bg-primary/20 rounded-full blur-[80px] sm:blur-[128px] pointer-events-none"></div>
       <div className="absolute bottom-0 right-1/4 w-48 h-48 sm:w-96 sm:h-96 bg-blue-600/10 rounded-full blur-[80px] sm:blur-[128px] pointer-events-none"></div>
 
-      <div className="container mx-auto z-10 py-10">
+      <div className="container mx-auto z-10 py-10 px-6">
         <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center min-h-[calc(100vh-200px)]">
           {/* Image Section - Shows first on mobile, second on desktop */}
           <div className="relative md:hidden md:order-2 flex items-center justify-center mb-8">
             <div className="relative w-full max-w-sm">
               {/* Gradient Circle Background */}
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-blue-500/10 to-transparent rounded-3xl blur-2xl"></div>
-              
+
               {/* Image Container */}
               <div className="relative w-full rounded-3xl overflow-hidden flex items-center justify-center">
-                <img 
-                  src="/heropng.webp" 
-                  alt="Happy pets" 
+                <img
+                  src="/heropng.webp"
+                  alt="Happy pets"
                   className="w-full h-auto object-contain"
                 />
               </div>
@@ -62,12 +62,12 @@ const Hero = () => {
             <div className="relative w-full">
               {/* Gradient Circle Background */}
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-blue-500/10 to-transparent rounded-3xl blur-2xl"></div>
-              
+
               {/* Image Container */}
               <div className="relative w-full rounded-3xl overflow-hidden flex items-center justify-center">
-                <img 
-                  src="/heropng.webp" 
-                  alt="Happy pets" 
+                <img
+                  src="/heropng.webp"
+                  alt="Happy pets"
                   className="w-full h-auto object-contain"
                 />
               </div>
